@@ -1,17 +1,9 @@
 #ifndef _DI_CONTAINER_IMPL_H_INCLUDED
 #define _DI_CONTAINER_IMPL_H_INCLUDED
 
-#include "di_container.h"
+//#include "di_container.h"
 
 using namespace di_container_;
-
-bool is_link_to(rttr::type a, rttr::type b) {
-    std::string a_type_name(a.get_name());
-    std::string b_type_name(b.get_name());
-
-    a_type_name+="*";
-    return (a_type_name == b_type_name);
-}
 
 template <class T>
 void di_container::add_instance() {

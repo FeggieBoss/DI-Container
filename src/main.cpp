@@ -14,6 +14,18 @@ using namespace rttr;
 
 struct MyStruct { MyStruct() {}; void func(double) {}; int data; };
 
+class Fita : public root_class {
+public:
+    virtual std::string name() const { return "Fita"; };
+    RTTR_ENABLE(root_class)
+};
+
+class Bar : public Fita {
+public:
+    std::string name() const override { return "Bar"; };
+    RTTR_ENABLE(Fita)
+};
+
 RTTR_REGISTRATION
 {
     registration::class_<MyStruct>("MyStruct")
@@ -31,8 +43,17 @@ RTTR_REGISTRATION
         .constructor<>()
         .property("a", &ServiceB::a)
         .method("say", &ServiceB::say);*/
-}
+    registration::class_<Fita>("root_class")
+        .constructor<>();
 
+    registration::class_<Fita>("Fita")
+        .constructor<>()
+        .method("name", &Fita::name);
+
+    registration::class_<Bar>("Bar")
+        .constructor<>()
+        .method("name", &Bar::name);
+}
 
 int main() {
     type t = type::get<MyStruct>();
@@ -50,5 +71,15 @@ int main() {
     std::cout<<supa.size()<<'\n';
     std::cout<<supa.back()->say();
     */
+
+    di_container_::di_container di;
+
+    di.add_instance<Bar>();
+    di.add_instance<root_class>();
+    di.add_instance<Fita>();
+
+    auto Fita_instances = di.get_prob_instances<Fita>();
+    std::cout<<Fita_instances.size();
+
     return 0;
 }

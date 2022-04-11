@@ -7,6 +7,13 @@ using namespace rttr;
 #include "ServiceA.h"
 #include "ServiceB.h"
 
+/*
+A <-> B
+- A::b is instance of B
+- B::a is instance of A
+- B::say() using A::say() inside
+*/
+
 RTTR_REGISTRATION
 {
     registration::class_<ServiceA>("ServiceA")
@@ -30,7 +37,7 @@ protected:
 
     // void TearDown() override;
 
-    di_container di;
+    di_container_::di_container di;
 };
 
 TEST_F(CyclicDepenciesTest, ProbInstancesNotEmpty) {
@@ -52,9 +59,4 @@ TEST_F(CyclicDepenciesTest, CorrectInstancesMethods) {
     auto B_instances = di.get_prob_instances<ServiceB>();
     EXPECT_EQ(A_instances.back()->say(), "I am A, and my son say: da") << "Wrong method A::say()";
     EXPECT_EQ(B_instances.back()->say(), "I am B, and my son say: I am A, and my son say: da") << "Wrong method B::say()";
-}
-
-int main(int argc, char **argv) {
-  ::testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
 }
