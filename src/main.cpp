@@ -22,7 +22,7 @@ RTTR_REGISTRATION
         .method("func", &MyStruct::func);
 
     
-    registration::class_<ServiceA>("ServiceA")
+    /*registration::class_<ServiceA>("ServiceA")
         .constructor<>()
         .property("b", &ServiceA::b)
         .method("say", &ServiceA::say);
@@ -30,7 +30,7 @@ RTTR_REGISTRATION
     registration::class_<ServiceB>("ServiceB")
         .constructor<>()
         .property("a", &ServiceB::a)
-        .method("say", &ServiceB::say);
+        .method("say", &ServiceB::say);*/
 }
 
 
@@ -42,13 +42,13 @@ int main() {
     for (auto& meth : t.get_methods())
         std::cout << "name: " << meth.get_name() << '\n';
 
-    di_container di;
+    /*di_container di;
     di.add_instance<ServiceA>();
     di.add_instance<ServiceB>();
     
     auto supa = di.get_prob_instances<ServiceB>();
     std::cout<<supa.size()<<'\n';
     std::cout<<supa.back()->say();
-
+    */
     return 0;
 }
