@@ -42,36 +42,6 @@ void di_container::initialize_instances_fields(T* new_instance_ptr) {
             initialize_prop_with(new_instance_ptr, prop, old_instance_ptr);
         }
     }
-
-    //rttr::variant new_instance = *new_instance_ptr;
-    //root_class &new_instance_link = *new_instance_ptr;
-
-    //for(root_class* old_instance_ptr : instances) {  
-        /*rttr::variant old_instance_ = *old_instance_ptr;
-        root_class &old_instance_link = *old_instance_ptr;
-
-        for(auto &prop : rttr::type::get(*old_instance_ptr).get_properties()) {
-            if(new_instance.can_convert(prop.get_type())) {
-                prop.set_value(*old_instance_ptr, *new_instance_ptr);
-                break;
-            }
-            else if(is_link_to(prop.get_type(), rttr::type::get(new_instance_link))) {
-                prop.set_value(*old_instance_ptr, new_instance_ptr);
-                break;
-            }
-        }
-
-        for(auto &prop : rttr::type::get(*new_instance_ptr).get_properties()) { 
-            if(old_instance_.can_convert(prop.get_type())) {
-                prop.set_value(*new_instance_ptr, *old_instance_ptr);
-                break;
-            }
-            else if(is_link_to(prop.get_type(), rttr::type::get(old_instance_link))) {
-                prop.set_value(*new_instance_ptr, old_instance_ptr);
-                break;
-            }
-        }*/
-    //}
 }
 
 bool di_container::initialize_prop_with(root_class* instance_ptr, rttr::property prop, root_class* obj_ptr) {

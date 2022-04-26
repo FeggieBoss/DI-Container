@@ -5,10 +5,6 @@
 #include "di_container.h"
 
 
-#include "ServiceA.h"
-#include "ServiceB.h"
-
-
 #include <rttr/registration>
 using namespace rttr;
 
@@ -33,16 +29,6 @@ RTTR_REGISTRATION
         .property("data", &MyStruct::data)
         .method("func", &MyStruct::func);
 
-    
-    /*registration::class_<ServiceA>("ServiceA")
-        .constructor<>()
-        .property("b", &ServiceA::b)
-        .method("say", &ServiceA::say);
-
-    registration::class_<ServiceB>("ServiceB")
-        .constructor<>()
-        .property("a", &ServiceB::a)
-        .method("say", &ServiceB::say);*/
     registration::class_<Fita>("root_class")
         .constructor<>();
 
@@ -74,12 +60,21 @@ int main() {
 
     di_container_::di_container di;
 
-    di.add_instance<Bar>();
-    di.add_instance<root_class>();
-    di.add_instance<Fita>();
+    di.___add_instance<Bar>();
+    di.___add_instance<root_class>();
+    di.___add_instance<Fita>();
 
-    auto Fita_instances = di.get_prob_instances<Fita>();
-    std::cout<<Fita_instances.size();
+
+    di.add_singleton<Bar>();
+    di.add_singleton<root_class>();
+    di.add_singleton<Fita>();
+
+    auto Fita_instance = di.get_instance<Fita>();
+    std::cout<<Fita_instance->name()<<"\n\n";
+    std::cout<<di.get_instance<Bar>()->name()<<"\n\n";
+
+    auto Fita_instances = di.___get_prob_instances<Fita>();
+    std::cout<<Fita_instances.size()<<'\n';
 
     return 0;
 }

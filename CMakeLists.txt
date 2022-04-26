@@ -3,8 +3,8 @@ cmake_minimum_required(VERSION 3.16.3)
 project(di_container VERSION 1.0)		
 
 file(GLOB SOURCES "src/*.cpp")
-file(GLOB TEST_SOURCES "test/*_test.cpp")
-file(GLOB DOP_TEST_SOURCES "test/*.cpp")
+file(GLOB TEST_SOURCES "test/src/*_test.cpp")
+file(GLOB DOP_TEST_SOURCES "test/src/*.cpp")
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
@@ -16,6 +16,7 @@ set(RTTR_DIR "~/MyData/rttr-build/install/share/rttr/cmake") # local path to rtt
 
 ### Main
 include_directories(include)
+include_directories(test/include)
 add_executable(app ${SOURCES})
 ### Main
 

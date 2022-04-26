@@ -3,12 +3,15 @@
 
 #include <string>
 #include <iostream>
+#include <chrono>
+#include <random>
 #include "root_class.h"
 
 class ServiceB;
 class ServiceA : public root_class { 
 public:
-    ServiceA() : root_class() {};
+    int id;
+    ServiceA();
     ~ServiceA() {};
     ServiceB* b;
 

@@ -5,7 +5,8 @@
 
 class ServiceB : public root_class { 
 public:
-    ServiceB() : root_class() {};
+    int id;
+    ServiceB();
     ~ServiceB() {};
     ServiceA* a;
 
