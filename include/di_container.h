@@ -4,9 +4,17 @@
 #include "root_class.h"
 
 #include <rttr/type>
+
+#include <iostream>
+#include <chrono>
+#include <random>
 #include <vector>
 
 namespace di_container_ {
+    inline int rng() {
+        return (std::mt19937_64(std::chrono::steady_clock::now().time_since_epoch().count()))()%1000;
+    };
+
     enum lifetime_type { Singleton, Scoped, Transient };
 
 class di_container {
@@ -188,14 +196,14 @@ private:
     bool initialize_prop_with(rttr::variant instance, rttr::property prop, rttr::variant obj) {
         //root_class &obj_link = *obj_ptr;
 
-        /*
+        
         std::cout<<"instance type - "<<instance.get_type().get_name()<<'\n';
         std::cout<<"obj type - "<<obj.get_type().get_name()<<'\n';
         std::cout<<"prop type - "<<prop.get_type().get_name()<<'\n';
-        */
+        
 
         if(obj.can_convert(prop.get_type())) {
-            //std::cout<<"we did it\n";
+            std::cout<<"we did it\n";
             obj.convert(prop.get_type());
             return prop.set_value(instance, obj);
         }

@@ -18,6 +18,8 @@ public:
 
 class Bar : public Fita {
 public:
+    int id;
+    Bar() : id(111) {};
     std::string name() const override { return "Bar"; };
     RTTR_ENABLE(Fita)
 };
@@ -29,7 +31,7 @@ RTTR_REGISTRATION
         .property("data", &MyStruct::data)
         .method("func", &MyStruct::func);
 
-    registration::class_<Fita>("root_class")
+    registration::class_<root_class>("root_class")
         .constructor<>();
 
     registration::class_<Fita>("Fita")
@@ -38,7 +40,8 @@ RTTR_REGISTRATION
 
     registration::class_<Bar>("Bar")
         .constructor<>()
-        .method("name", &Bar::name);
+        .method("name", &Bar::name)
+        .property("id", &Bar::id);
 }
 
 int main() {
@@ -72,6 +75,7 @@ int main() {
     auto Fita_instance = di.get_instance<Fita>();
     std::cout<<Fita_instance->name()<<"\n\n";
     std::cout<<di.get_instance<Bar>()->name()<<"\n\n";
+    std::cout<<di.get_instance<Bar>()->id<<"\n\n";
 
     auto Fita_instances = di.___get_prob_instances<Fita>();
     std::cout<<Fita_instances.size()<<'\n';

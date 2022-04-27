@@ -1,3 +1,5 @@
+//DEPRICATED
+
 #ifndef _DI_CONTAINER_IMPL_H_INCLUDED
 #define _DI_CONTAINER_IMPL_H_INCLUDED
 
@@ -5,7 +7,7 @@
 
 using namespace di_container_;
 
-template <class T>
+/*template <class T>
 void di_container::add_instance() {
     T* new_instance = new T();
 
@@ -62,6 +64,6 @@ di_container::~di_container() {
         delete instance;
     
     instances.clear();
-}
+}*/
 
 #endif //_DI_CONTAINER_IMPL_H_INCLUDED

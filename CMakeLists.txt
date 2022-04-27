@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 3.16.3)
 project(di_container VERSION 1.0)		
 
 file(GLOB SOURCES "src/*.cpp")
+file(GLOB DI_SOURCES "src/*di_container.cpp")
 file(GLOB TEST_SOURCES "test/src/*_test.cpp")
 file(GLOB DOP_TEST_SOURCES "test/src/*.cpp")
 
@@ -39,7 +40,7 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 include_directories(${googletest_SOURCE_DIR}/googletest/include/gtest)
-add_executable(unitTests ${TEST_SOURCES} ${DOP_TEST_SOURCES})
+add_executable(unitTests ${DI_SOURCES} ${TEST_SOURCES} ${DOP_TEST_SOURCES})
 
 target_link_libraries(
     unitTests
