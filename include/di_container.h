@@ -55,19 +55,19 @@ public:
     //////////////////////
     template <class T> 
     void add_singleton() {
-        add_constructor<T>();
+        // DEPRICATED add_constructor<T>();
         lifetime_types[std::string(rttr::type::get<T>().get_name())] = lifetime_type::Singleton;
     };
 
     template <class T> 
     void add_scoped() {
-        add_constructor<T>();
+        // DEPRICATED add_constructor<T>();
         lifetime_types[std::string(rttr::type::get<T>().get_name())] = lifetime_type::Scoped;
     };
 
     template <class T> 
     void add_transient() {
-        add_constructor<T>();
+        // DEPRICATED add_constructor<T>();
         lifetime_types[std::string(rttr::type::get<T>().get_name())] = lifetime_type::Transient;
     };
 
@@ -159,6 +159,9 @@ private:
             //std::cout<<"ctor type - "<< ret_instance.get_type().get_name()<<'\n';
         }
 
+        ///////////////// TO DO
+        pomoyka.emplace_back(ret_instance);
+        ////////////////
         switch (lifetime_types[type_name])
         {
             case Singleton : singleton_instances[type_name] = ret_instance;
@@ -197,13 +200,13 @@ private:
         //root_class &obj_link = *obj_ptr;
 
         
-        std::cout<<"instance type - "<<instance.get_type().get_name()<<'\n';
-        std::cout<<"obj type - "<<obj.get_type().get_name()<<'\n';
-        std::cout<<"prop type - "<<prop.get_type().get_name()<<'\n';
+        //std::cout<<"instance type - "<<instance.get_type().get_name()<<'\n';
+        //std::cout<<"obj type - "<<obj.get_type().get_name()<<'\n';
+        //std::cout<<"prop type - "<<prop.get_type().get_name()<<'\n';
         
 
         if(obj.can_convert(prop.get_type())) {
-            std::cout<<"we did it\n";
+            //std::cout<<"we did it\n";
             obj.convert(prop.get_type());
             return prop.set_value(instance, obj);
         }
@@ -219,11 +222,14 @@ private:
     std::vector<root_class*> ___instances;
     //
 
-    //////////////////////
-    // через map не получится, так как у rttr::constructor не конструктора по умолчанию
+    ////////////////////// DEPRICATED
     std::vector<rttr::constructor> constructors;
+    //////////////////////
     std::map<std::string, rttr::variant> singleton_instances, scoped_instances;
     std::map<std::string, lifetime_type> lifetime_types;
+
+    ////////////////////// TO DO
+    std::vector<rttr::variant> pomoyka;
     //////////////////////
 };
 

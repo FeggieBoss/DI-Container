@@ -76,19 +76,41 @@ TEST_F(ScopedTest, SingleGetInstance) {
 TEST_F(ScopedTest, ScopedFieldsSingleGetInstance) {
     auto Fita_instance = di.get_instance<ScopedTestFita>();
 
-     std::cout<<"Fita_instance->bar->id::"<<Fita_instance->bar->id<<'\n';
-     std::cout<<"Fita_instance->baz->bar->id::"<<Fita_instance->baz->bar->id<<'\n';
+    // std::cout<<"Fita_instance->bar->id::"<<Fita_instance->bar->id<<'\n';
+    // std::cout<<"Fita_instance->baz->bar->id::"<<Fita_instance->baz->bar->id<<'\n';
     EXPECT_EQ(Fita_instance->bar->id, Fita_instance->baz->bar->id) << "Rebuild happened in SAME get instance call";
 }
 
-TEST_F(ScopedTest, ScopedFieldsMultipleGetInstance) {
+TEST_F(ScopedTest, ScopedFieldsOfSingletonClassMultipleGetInstance) {
     auto Fita_instance1 = di.get_instance<ScopedTestFita>();
     auto Fita_instance2 = di.get_instance<ScopedTestFita>();
 
-    std::cout<<"Fita_instance1->bar->id::"<<Fita_instance1->bar->id<<'\n';
-    std::cout<<"Fita_instance1->baz->bar->id::"<<Fita_instance1->baz->bar->id<<'\n';
-    std::cout<<"Fita_instance2->bar->id::"<<Fita_instance2->bar->id<<'\n';
-    std::cout<<"Fita_instance2->baz->bar->id::"<<Fita_instance2->baz->bar->id<<'\n';
+    // std::cout<<"Fita_instance1->bar->id::"<<Fita_instance1->bar->id<<'\n';
+    // std::cout<<"Fita_instance1->baz->bar->id::"<<Fita_instance1->baz->bar->id<<'\n';
+    // std::cout<<"Fita_instance2->bar->id::"<<Fita_instance2->bar->id<<'\n';
+    // std::cout<<"Fita_instance2->baz->bar->id::"<<Fita_instance2->baz->bar->id<<'\n';
+    EXPECT_EQ(Fita_instance1->bar->id, Fita_instance1->baz->bar->id) << "Rebuild happened in SAME get instance call";
+    EXPECT_EQ(Fita_instance2->bar->id, Fita_instance2->baz->bar->id) << "Rebuild happened in SAME get instance call";
+    EXPECT_EQ(Fita_instance1->bar->id, Fita_instance2->bar->id) << "Rebuild happened in scoped field of SINGLETON Fita::bar in get instance calls";
+}
+
+TEST_F(ScopedTest, ScopedFieldsOfTransientClassMultipleGetInstance) {
+/*
+    Fita(transient)--->Bar(scoped)
+                   |-->Baz(transient)-->Bar(scoped)    
+                    
+    want to check rebuilding in different get_instance calls, and no rebuilding in same 
+*/
+    di.add_scoped<ScopedTestFita>();
+    di.add_transient<ScopedTestBaz>();
+
+    auto Fita_instance1 = di.get_instance<ScopedTestFita>();
+    auto Fita_instance2 = di.get_instance<ScopedTestFita>();
+
+    // std::cout<<"Fita_instance1->bar->id::"<<Fita_instance1->bar->id<<'\n';
+    // std::cout<<"Fita_instance1->baz->bar->id::"<<Fita_instance1->baz->bar->id<<'\n';
+    // std::cout<<"Fita_instance2->bar->id::"<<Fita_instance2->bar->id<<'\n';
+    // std::cout<<"Fita_instance2->baz->bar->id::"<<Fita_instance2->baz->bar->id<<'\n';
     EXPECT_EQ(Fita_instance1->bar->id, Fita_instance1->baz->bar->id) << "Rebuild happened in SAME get instance call";
     EXPECT_EQ(Fita_instance2->bar->id, Fita_instance2->baz->bar->id) << "Rebuild happened in SAME get instance call";
     EXPECT_NE(Fita_instance1->bar->id, Fita_instance2->bar->id) << "No rebuild happened in DIFFERENT get instance calls";
