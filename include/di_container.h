@@ -53,6 +53,11 @@ public:
     //
 
     //////////////////////
+    template <class T, typename K> 
+    void register_field(std::string name, const K& val) {
+        registered_fields[std::string(rttr::type::get<T>().get_name())].emplace_back(name, val);      
+    };
+
     template <class T> 
     void add_singleton() {
         // DEPRICATED add_constructor<T>();
@@ -88,7 +93,7 @@ public:
 
         scoped_instances.clear();
         return instance;
-    }
+    };
     //////////////////////
 
 private:
@@ -159,6 +164,14 @@ private:
             //std::cout<<"ctor type - "<< ret_instance.get_type().get_name()<<'\n';
         }
 
+        if(!ret_instance)
+            return ret_instance;
+
+        if(registered_fields.find(type_name) != registered_fields.end()) {
+            for(auto reg_field : registered_fields[type_name])
+                t.set_property_value(reg_field.first, ret_instance, reg_field.second);
+        }
+
         ///////////////// TO DO
         pomoyka.emplace_back(ret_instance);
         ////////////////
@@ -169,45 +182,44 @@ private:
             case Transient : /*do nothing*/;
         }
 
-        if(ret_instance) {
-            for(auto &prop : t.get_properties()) {
-                rttr::variant prop_instance = get_instance_by_type(prop.get_type());
-                std::string prop_instance_type_name(prop_instance.get_type().get_name());
+        
+        for(auto &prop : t.get_properties()) {
+            rttr::variant prop_instance = get_instance_by_type(prop.get_type());
+            std::string prop_instance_type_name(prop_instance.get_type().get_name());
+            // std::cout<<"prop_instance_type_name_sz is "<<prop_instance_type_name.size()<<'\n';
+            if(!prop_instance_type_name.empty())
+                initialize_prop_with(ret_instance, prop, prop_instance);
+            else {
+                std::string prop_type_name(prop.get_type().get_name());
 
-                //std::cout<<"prop_instance_type_name_sz is "<<prop_instance_type_name.size()<<'\n';
-                if(!prop_instance_type_name.empty())
-                    initialize_prop_with(ret_instance, prop, prop_instance);
-                else {
-                    std::string prop_type_name(prop.get_type().get_name());
-
-                    //std::cout<<"prop_type_name is "<<prop_type_name<<'\n';
-                    //if(prop_type_name=="int") {
-                    //    std::cout<<"int:" << (prop.get_value(ret_instance).get_value<int>()) <<'\n';
-                    //}
-                    if(prop_type_name.back()=='*') {
-                        prop_type_name.erase((--prop_type_name.end()));
-                        prop_instance = get_instance_by_type(rttr::type::get_by_name(prop_type_name));
-                        initialize_prop_with(ret_instance, prop, prop_instance);
-                    }
+                //std::cout<<"prop_type_name is "<<prop_type_name<<'\n';
+                //if(prop_type_name=="int") {
+                //    std::cout<<"int:" << (prop.get_value(ret_instance).get_value<int>()) <<'\n';
+                //}
+                if(prop_type_name.back()=='*') {
+                    prop_type_name.erase((--prop_type_name.end()));
+                    prop_instance = get_instance_by_type(rttr::type::get_by_name(prop_type_name));
+                    
+                    initialize_prop_with(ret_instance, prop, prop_instance.extract_wrapped_value());
                 }
-            }
+            }        
         }
-
+        
         return ret_instance;
-    }
+    };
 
     bool initialize_prop_with(rttr::variant instance, rttr::property prop, rttr::variant obj) {
         //root_class &obj_link = *obj_ptr;
 
         
-        //std::cout<<"instance type - "<<instance.get_type().get_name()<<'\n';
-        //std::cout<<"obj type - "<<obj.get_type().get_name()<<'\n';
-        //std::cout<<"prop type - "<<prop.get_type().get_name()<<'\n';
+        // std::cout<<"instance type - "<<instance.get_type().get_name()<<'\n';
+        // std::cout<<"obj type - "<<obj.get_type().get_name()<<'\n';
+        // std::cout<<"prop type - "<<prop.get_type().get_name()<<'\n';
         
 
         if(obj.can_convert(prop.get_type())) {
             //std::cout<<"we did it\n";
-            obj.convert(prop.get_type());
+            //obj.convert(prop.get_type());
             return prop.set_value(instance, obj);
         }
         /*if(is_link_to(prop.get_type(), rttr::type::get(obj_link))) 
@@ -227,6 +239,7 @@ private:
     //////////////////////
     std::map<std::string, rttr::variant> singleton_instances, scoped_instances;
     std::map<std::string, lifetime_type> lifetime_types;
+    std::map<std::string, std::vector<std::pair<std::string, rttr::variant>>> registered_fields; 
 
     ////////////////////// TO DO
     std::vector<rttr::variant> pomoyka;
