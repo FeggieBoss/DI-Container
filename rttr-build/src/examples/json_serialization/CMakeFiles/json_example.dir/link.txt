@@ -1,0 +1,1 @@
+/usr/bin/c++   -frtti -O3 -DNDEBUG -frtti  -rdynamic CMakeFiles/json_example.dir/main.cpp.o CMakeFiles/json_example.dir/to_json.cpp.o CMakeFiles/json_example.dir/from_json.cpp.o  -o ../../../bin/json_example  -Wl,-rpath,/home/feggie/MyData/rttr-build/lib ../../../lib/librttr_core.so.0.9.6 

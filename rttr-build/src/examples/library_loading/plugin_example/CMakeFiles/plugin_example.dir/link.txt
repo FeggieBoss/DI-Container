@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -frtti -O3 -DNDEBUG -frtti  -shared -Wl,-soname,libplugin_example.so -o ../../../../lib/libplugin_example.so CMakeFiles/plugin_example.dir/main.cpp.o  -Wl,-rpath,/home/feggie/MyData/rttr-build/lib ../../../../lib/librttr_core.so.0.9.6 

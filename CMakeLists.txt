@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11")
 # set(Boost_USE_STATIC_LIBS OFF)
-set(RTTR_DIR "~/MyData/rttr-build/install/share/rttr/cmake") # local path to rttr/cmake !!!
+set(RTTR_DIR "~/MyData/DI-Container/rttr-build/install/share/rttr/cmake") # local path to rttr/cmake !!!
 
 
 

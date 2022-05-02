@@ -1,0 +1,41 @@
+file(REMOVE_RECURSE
+  "../../lib/librttr_core.pdb"
+  "../../lib/librttr_core.so"
+  "../../lib/librttr_core.so.0.9.6"
+  "CMakeFiles/rttr_core.dir/constructor.cpp.o"
+  "CMakeFiles/rttr_core.dir/destructor.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/comparison/compare_equal.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/comparison/compare_less.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/constructor/constructor_wrapper_base.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/conversion/std_conversion_functions.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/destructor/destructor_wrapper_base.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/enumeration/enumeration_helper.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/enumeration/enumeration_wrapper_base.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/library/library_unix.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/library/library_win.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/method/method_wrapper_base.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/misc/standard_types.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/parameter_info/parameter_info_wrapper_base.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/property/property_wrapper_base.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/registration/registration_executer.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/registration/registration_state_saver.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/type/type_data.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/type/type_register.cpp.o"
+  "CMakeFiles/rttr_core.dir/detail/variant/variant_compare.cpp.o"
+  "CMakeFiles/rttr_core.dir/enumeration.cpp.o"
+  "CMakeFiles/rttr_core.dir/library.cpp.o"
+  "CMakeFiles/rttr_core.dir/method.cpp.o"
+  "CMakeFiles/rttr_core.dir/parameter_info.cpp.o"
+  "CMakeFiles/rttr_core.dir/policy.cpp.o"
+  "CMakeFiles/rttr_core.dir/property.cpp.o"
+  "CMakeFiles/rttr_core.dir/registration.cpp.o"
+  "CMakeFiles/rttr_core.dir/type.cpp.o"
+  "CMakeFiles/rttr_core.dir/variant.cpp.o"
+  "CMakeFiles/rttr_core.dir/variant_associative_view.cpp.o"
+  "CMakeFiles/rttr_core.dir/variant_sequential_view.cpp.o"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/rttr_core.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
