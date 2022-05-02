@@ -1,6 +1,5 @@
 # DI-Container
-[![CMake](https://github.com/FeggieBoss/DI-Container/actions/workflows/cmake.yml/badge.svg)]
-(https://github.com/FeggieBoss/DI-Container/actions/workflows/cmake.yml)
+![CMake](https://github.com/FeggieBoss/DI-Container/actions/workflows/cmake.yml/badge.svg)
 
 # DI Containers
 ## Dependency injection 
