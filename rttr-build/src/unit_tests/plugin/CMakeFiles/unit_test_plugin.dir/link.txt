@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC  -frtti -O3 -DNDEBUG -frtti  -shared -Wl,-soname,libunit_test_plugin.so -o ../../../lib/libunit_test_plugin.so CMakeFiles/unit_test_plugin.dir/test_container_plugin.cpp.o CMakeFiles/unit_test_plugin.dir/test_class_plugin.cpp.o  -Wl,-rpath,/home/feggie/MyData/rttr-build/lib ../../../lib/librttr_core.so.0.9.6 

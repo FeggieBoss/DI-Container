@@ -1,0 +1,1 @@
+/usr/bin/c++   -frtti -O3 -DNDEBUG -frtti  -rdynamic CMakeFiles/library_loader_example.dir/main.cpp.o  -o ../../../../bin/library_loader_example  -Wl,-rpath,/home/feggie/MyData/rttr-build/lib ../../../../lib/librttr_core.so.0.9.6 
