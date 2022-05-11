@@ -16,6 +16,7 @@ set(RTTR_DIR ${PROJECT_SOURCE_DIR}/rttr-build/install/share/rttr/cmake) # local 
 
 
 ### Main
+include(FetchContent)
 include_directories(include)
 include_directories(test/include)
 add_executable(app ${SOURCES})
@@ -26,10 +27,7 @@ find_package(RTTR CONFIG REQUIRED Core)
 target_link_libraries(app RTTR::Core)
 ### RTTR Main
 
-
-
 ### GoogleTest
-include(FetchContent)
 FetchContent_Declare(
   googletest
   URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
@@ -51,6 +49,17 @@ target_link_libraries(
 include(GoogleTest)
 gtest_discover_tests(unitTests)
 ### GoogleTest
+
+### JSON
+FetchContent_Declare(
+  json 
+  URL https://github.com/nlohmann/json/releases/download/v3.10.5/json.tar.xz
+)
+
+FetchContent_MakeAvailable(json)
+target_link_libraries(app nlohmann_json::nlohmann_json)
+target_link_libraries(unitTests nlohmann_json::nlohmann_json)
+###
 
 ### RTTR GoogleTest
 # find_package(RTTR CONFIG REQUIRED Core) <- already found

@@ -5,10 +5,16 @@
 
 #include <rttr/type>
 
+#include <nlohmann/json.hpp>
+using json = nlohmann::json;
+
 #include <iostream>
+#include <iomanip>
 #include <chrono>
 #include <random>
 #include <vector>
+
+#include <stdio.h>
 
 namespace di_container_ {
     inline int rng() {
@@ -54,9 +60,35 @@ public:
 
     //////////////////////
     template <class T, typename K> 
-    void register_field(std::string name, const K& val) {
-        registered_fields[std::string(rttr::type::get<T>().get_name())].emplace_back(name, val);      
+    void register_field(std::string field_name, const K& val) {
+        registered_fields[std::string(rttr::type::get<T>().get_name())].emplace_back(field_name, val);      
     };
+
+    template <typename K> 
+    void register_field(std::string class_name, std::string field_name, const K& val) {
+        registered_fields[class_name].emplace_back(field_name, val);      
+    };
+
+    template <typename K>
+    void register_field(json &j) {
+        for(auto &cur_class : j.items()) {
+            for(auto &field : cur_class.value().items()) {
+                register_field<K>(cur_class.key(), field.key(), field.value().get<K>());
+            }
+        }
+    }
+
+    void file_registration(std::string file_name) {
+        json j = json::parse(fopen(file_name.c_str(), "r"));
+        register_field<int>(j["int"]);
+        register_field<signed int>(j["signed int"]);
+        register_field<unsigned int>(j["unsigned int"]);
+        register_field<bool>(j["bool"]);
+        register_field<double>(j["double"]);
+        register_field<std::string>(j["std::string"]);
+        register_field<std::vector<bool>>(j["std::vector<bool>"]);
+        register_field<std::map<bool, bool>>(j["std::map<bool, bool>"]);
+    }
 
     template <class T> 
     void add_singleton() {
@@ -80,15 +112,7 @@ public:
     std::shared_ptr<T> get_instance() {
         rttr::type t = rttr::type::get<T>();
         rttr::variant _instance = get_instance_by_type(t);
-
-        //bool ok = false;
-        //std::cout<<_instance.can_convert(rttr::type::get<T>()) <<'\n';
-        //ok = _instance.convert(rttr::type::get<T>());
-        //std::cout<< ok <<'\n';
-
-        //T instance = _instance.get_value<T>();
         
-        //_instance.convert(rttr::type::get<T>());
         std::shared_ptr<T> instance = _instance.get_value<std::shared_ptr<T>>();
 
         scoped_instances.clear();
@@ -227,6 +251,8 @@ private:
 
         return false;
     };
+
+    
     //////////////////////
 
 private:
