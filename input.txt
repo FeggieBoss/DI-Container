@@ -1,0 +1,45 @@
+{
+    "int": {
+        "FieldsRegistrationJsonTestBat": {
+            "int_": 12345
+        },
+        "Bar": {
+            "id": 123
+        }
+    },
+    "signed int": {
+        "FieldsRegistrationJsonTestBat": {
+            "signed_int_": -12345
+        }
+    },
+    "unsigned int": {
+        "FieldsRegistrationJsonTestBat": {
+            "unsigned_int_": 12345
+        }
+    },
+    "bool": {
+        "FieldsRegistrationJsonTestBat": {
+            "bool_": true
+        }
+    },
+    "double": {
+        "FieldsRegistrationJsonTestBat": {
+            "double_": 12345.12345
+        }
+    },
+    "std::string": {
+        "FieldsRegistrationJsonTestBaz": {
+            "string_": "12345"
+        }
+    },
+    "std::vector<bool>": {
+        "FieldsRegistrationJsonTestBaz": {
+            "vector_": [true, false, true, false, true]
+        }
+    },
+    "std::map<bool, bool>": {
+        "FieldsRegistrationJsonTestBaz": {
+            "map_": [[true, true], [false, true]]
+        }
+    }
+}
