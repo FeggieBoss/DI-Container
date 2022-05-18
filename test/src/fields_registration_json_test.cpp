@@ -77,7 +77,7 @@ protected:
         di.add_singleton<FieldsRegistrationJsonTestBat>();
         di.add_transient<FieldsRegistrationJsonTestBaz>();
 
-        di.file_registration("input.txt");
+        di.file_registration("../build/input.txt");
     }
 
     //void TearDown() override {};
