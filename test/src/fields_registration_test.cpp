@@ -106,10 +106,10 @@ protected:
 
     // void SetUp() override;
     void SetUp() override {
-        di.add_singleton<FieldsRegistrationTestFita>();
-        di.add_singleton<FieldsRegistrationTestBat>();
-        di.add_scoped<FieldsRegistrationTestBar>();
-        di.add_transient<FieldsRegistrationTestBaz>();
+        di.register_instance_singleton_simple<FieldsRegistrationTestFita>();
+        di.register_instance_singleton_simple<FieldsRegistrationTestBat>();
+        di.register_instance_scoped_simple<FieldsRegistrationTestBar>();
+        di.register_instance_transient_simple<FieldsRegistrationTestBaz>();
 
         di_int_ptr = new int[1];
         di_int_shared_ptr = std::make_shared<int>(12345);

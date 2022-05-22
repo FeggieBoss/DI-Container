@@ -53,9 +53,9 @@ class TransientTest : public ::testing::Test {
 protected:
     // void SetUp() override;
     void SetUp() override {
-        di.add_singleton<TransientTestFita>();
-        di.add_singleton<TransientTestBaz>();
-        di.add_transient<TransientTestBar>();
+        di.register_instance_singleton_simple<TransientTestFita>();
+        di.register_instance_singleton_simple<TransientTestBaz>();
+        di.register_instance_transient_simple<TransientTestBar>();
     }   
 
     // void TearDown() override;
@@ -100,8 +100,8 @@ TEST_F(TransientTest, TransientFieldsOfTransientClassMultipleGetInstance) {
                     
     want to check rebuilding in get_instance calls
 */
-    di.add_transient<TransientTestFita>();
-    di.add_transient<TransientTestBaz>();
+    di.register_instance_transient_simple<TransientTestFita>();
+    di.register_instance_transient_simple<TransientTestBaz>();
 
     auto Fita_instance1 = di.get_instance<TransientTestFita>();
     auto Fita_instance2 = di.get_instance<TransientTestFita>();
@@ -117,8 +117,8 @@ TEST_F(TransientTest, TransientFieldsOfTransientClassMultipleGetInstance) {
 
 TEST_F(TransientTest, MultipleCallAddTransient) {
     di_container_::di_container di;
-    di.add_transient<TransientTestBar>();
-    di.add_transient<TransientTestBar>();
+    di.register_instance_transient_simple<TransientTestBar>();
+    di.register_instance_transient_simple<TransientTestBar>();
 
     auto Bar_instance1 = di.get_instance<TransientTestBar>();
     auto Bar_instance2 = di.get_instance<TransientTestBar>();

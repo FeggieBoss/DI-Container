@@ -1,84 +1,75 @@
-#include <cassert>
-#include <string>
-#include <iostream>
-
 #include "di_container.h"
-
 
 #include <rttr/registration>
 using namespace rttr;
 
-struct MyStruct { MyStruct() {}; void func(double) {}; int data; };
+#include <cassert>
+#include <string>
+#include <iostream>
+#include <map>
 
-class Fita : public root_class {
+class BarI {
 public:
-    virtual std::string name() const { return "Fita"; };
-    RTTR_ENABLE(root_class)
+    virtual std::string name() const = 0;
+    RTTR_ENABLE()
 };
 
-class Bar : public Fita {
+class Bar : public BarI{
 public:
     int id;
     Bar() : id(111) {};
-    std::string name() const override { return "Bar"; };
-    RTTR_ENABLE(Fita)
+    Bar(int id_) : id(id_) {};
+    std::string name() const override { return "Bar"+std::to_string(id); };
+    RTTR_ENABLE(BarI)
+};
+
+class Fita {
+public:
+    BarI* bar;
+    std::string name() const { 
+        std::string barik = bar->name();
+        barik+= " i Fitusya";
+        return barik;
+    };
+    RTTR_ENABLE()
 };
 
 RTTR_REGISTRATION
 {
-    registration::class_<MyStruct>("MyStruct")
-        .constructor<>()
-        .property("data", &MyStruct::data)
-        .method("func", &MyStruct::func);
-
-    registration::class_<root_class>("root_class")
-        .constructor<>();
-
     registration::class_<Fita>("Fita")
         .constructor<>()
-        .method("name", &Fita::name);
+        .method("name", &Fita::name)
+        .property("bar", &Fita::bar);
+
+    registration::class_<BarI>("BarI")
+        .method("name", &BarI::name);
 
     registration::class_<Bar>("Bar")
         .constructor<>()
+        .constructor<int>()
         .method("name", &Bar::name)
         .property("id", &Bar::id);
 }
 
 int main() {
-    type t = type::get<MyStruct>();
-    for (auto& prop : t.get_properties())
-        std::cout << "name: " << prop.get_name() << '\n';
-
-    for (auto& meth : t.get_methods())
-        std::cout << "name: " << meth.get_name() << '\n';
-
-    /*di_container di;
-    di.add_instance<ServiceA>();
-    di.add_instance<ServiceB>();
-    
-    auto supa = di.get_prob_instances<ServiceB>();
-    std::cout<<supa.size()<<'\n';
-    std::cout<<supa.back()->say();
-    */
-
     di_container_::di_container di;
+    //di.add_singleton<Bar>();
+    //di.add_singleton<Fita>();
 
-    di.___add_instance<Bar>();
-    di.___add_instance<root_class>();
-    di.___add_instance<Fita>();
+    //di.field_file_registration("input.txt");
+    di.register_instance<BarI,Bar>({1}, di_container_::lifetime_type::Singleton);
+    di.register_instance<Bar,Bar>({2}, di_container_::lifetime_type::Singleton);
+    di.register_instance<Fita,Fita>({}, di_container_::lifetime_type::Scoped);
 
-
-    di.add_singleton<Bar>();
-    di.add_singleton<root_class>();
-    di.add_singleton<Fita>();
-
-    auto Fita_instance = di.get_instance<Fita>();
-    std::cout<<Fita_instance->name()<<"\n\n";
     std::cout<<di.get_instance<Bar>()->name()<<"\n\n";
-    std::cout<<di.get_instance<Bar>()->id<<"\n\n";
+    //std::cout<<di.get_instance<Bar>()->id<<"\n\n";
 
-    auto Fita_instances = di.___get_prob_instances<Fita>();
-    std::cout<<Fita_instances.size()<<'\n';
+    di.get_instance<Bar>()->id = 142412;
+
+    std::cout<<di.get_instance<BarI>()->name()<<"\n\n";
+    //std::cout<<di.get_instance<Bar>()->id<<"\n\n";
+    std::cout<<"==="<<di.get_instance<Fita>()->name()<<"\n\n";
+    //std::cout<<"==="<<di.get_instance<Fita>()->bar->id<<"\n\n";
 
     return 0;
 }

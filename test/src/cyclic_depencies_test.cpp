@@ -33,8 +33,8 @@ class CyclicDepenciesTest : public ::testing::Test {
 protected:
     // void SetUp() override;
     void SetUp() override {
-        di.add_singleton<ServiceA>();
-        di.add_singleton<ServiceB>();
+        di.register_instance_singleton_simple<ServiceA>();
+        di.register_instance_singleton_simple<ServiceB>();
     }   
 
     // void TearDown() override;
@@ -67,8 +67,8 @@ TEST_F(CyclicDepenciesTest, CorrectInstancesMethods) {
 
 TEST(CyclicDepenciesTestMixed, AllInOnce) {
     di_container_::di_container di;
-    di.add_scoped<ServiceA>();
-    di.add_singleton<ServiceB>();
+    di.register_instance_scoped_simple<ServiceA>();
+    di.register_instance_singleton_simple<ServiceB>();
 
     auto A_instance = di.get_instance<ServiceA>();
     auto B_instance = di.get_instance<ServiceB>();
