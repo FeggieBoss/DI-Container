@@ -54,9 +54,9 @@ class ScopedTest : public ::testing::Test {
 protected:
     // void SetUp() override;
     void SetUp() override {
-        di.add_singleton<ScopedTestFita>();
-        di.add_singleton<ScopedTestBaz>();
-        di.add_scoped<ScopedTestBar>();
+        di.register_instance_singleton_simple<ScopedTestFita>();
+        di.register_instance_singleton_simple<ScopedTestBaz>();
+        di.register_instance_scoped_simple<ScopedTestBar>();
     }   
 
     // void TearDown() override;
@@ -101,8 +101,8 @@ TEST_F(ScopedTest, ScopedFieldsOfTransientClassMultipleGetInstance) {
                     
     want to check rebuilding in different get_instance calls, and no rebuilding in same 
 */
-    di.add_scoped<ScopedTestFita>();
-    di.add_transient<ScopedTestBaz>();
+    di.register_instance_scoped_simple<ScopedTestFita>();
+    di.register_instance_transient_simple<ScopedTestBaz>();
 
     auto Fita_instance1 = di.get_instance<ScopedTestFita>();
     auto Fita_instance2 = di.get_instance<ScopedTestFita>();
@@ -118,8 +118,8 @@ TEST_F(ScopedTest, ScopedFieldsOfTransientClassMultipleGetInstance) {
 
 TEST_F(ScopedTest, MultipleCallAddScoped) {
     di_container_::di_container di;
-    di.add_scoped<ScopedTestBar>();
-    di.add_scoped<ScopedTestBar>();
+    di.register_instance_scoped_simple<ScopedTestBar>();
+    di.register_instance_scoped_simple<ScopedTestBar>();
 
     auto Bar_instance1 = di.get_instance<ScopedTestBar>();
     auto Bar_instance2 = di.get_instance<ScopedTestBar>();

@@ -73,11 +73,11 @@ RTTR_REGISTRATION
 class FieldsRegistrationJsonTest : public ::testing::Test {
 protected:
     void SetUp() override {
-        di.add_singleton<FieldsRegistrationJsonTestFita>();
-        di.add_singleton<FieldsRegistrationJsonTestBat>();
-        di.add_transient<FieldsRegistrationJsonTestBaz>();
+        di.register_instance_singleton_simple<FieldsRegistrationJsonTestFita>();
+        di.register_instance_singleton_simple<FieldsRegistrationJsonTestBat>();
+        di.register_instance_transient_simple<FieldsRegistrationJsonTestBaz>();
 
-        di.file_registration("input.txt");
+        di.field_file_registration("../samples/field_registration_json_test.txt");
     }
 
     //void TearDown() override {};

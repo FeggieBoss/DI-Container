@@ -50,9 +50,9 @@ class SingletonTest : public ::testing::Test {
 protected:
     // void SetUp() override;
     void SetUp() override {
-        di.add_singleton<SingletonTestFita>();
-        di.add_scoped<SingletonTestBar>();
-        di.add_transient<SingletonTestBaz>();
+        di.register_instance_singleton_simple<SingletonTestFita>();
+        di.register_instance_scoped_simple<SingletonTestBar>();
+        di.register_instance_transient_simple<SingletonTestBaz>();
     }
 
     // void TearDown() override;
@@ -81,7 +81,7 @@ TEST_F(SingletonTest, MultipleCallGetInstance) {
 }
 
 TEST_F(SingletonTest, MultipleCallAddSingleton) {
-    di.add_singleton<SingletonTestFita>();
+    di.register_instance_singleton_simple<SingletonTestFita>();
 
     auto Fita_instance1 = di.get_instance<SingletonTestFita>();
     auto Fita_instance2 = di.get_instance<SingletonTestFita>();
