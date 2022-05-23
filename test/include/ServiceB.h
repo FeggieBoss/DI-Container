@@ -3,7 +3,7 @@
 
 #include "ServiceA.h"
 
-class ServiceB : public root_class { 
+class ServiceB { 
 public:
     int id;
     ServiceB();
@@ -12,7 +12,7 @@ public:
 
     std::string say();
 
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
 #endif //_SERVICE_B_CLASS_H_INCLUDED

@@ -16,7 +16,7 @@ using namespace di_container_;
     Fita(singleton) <-- Bat(singleton),Bar(scoped),Baz(transient)
 */
 
-class FieldsRegistrationTestBat : public root_class {
+class FieldsRegistrationTestBat {
 public:
     int int_;
     signed int signed_int_;
@@ -25,10 +25,10 @@ public:
     double double_;
     char char_;
     
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class FieldsRegistrationTestBar : public root_class {
+class FieldsRegistrationTestBar {
 public:
     int* getter_int_ptr() const {return int_ptr;};
     std::shared_ptr<int> getter_int_shared_ptr() const {return int_shared_ptr;}; 
@@ -36,11 +36,11 @@ protected:
     int* int_ptr;
     std::shared_ptr<int> int_shared_ptr;
 
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
     RTTR_REGISTRATION_FRIEND
 };
 
-class FieldsRegistrationTestBaz : public root_class {
+class FieldsRegistrationTestBaz {
 public:
     std::string getter_string_() const {return string_;}; 
     std::pair<bool, bool> getter_pair_() const {return pair_;}; 
@@ -52,24 +52,21 @@ private:
     std::vector<bool> vector_;
     std::map<bool, bool> map_;
 
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
     RTTR_REGISTRATION_FRIEND
 };
 
-class FieldsRegistrationTestFita : public root_class {
+class FieldsRegistrationTestFita {
 public:    
     FieldsRegistrationTestBat* FieldsRegistrationTestBat_;
     FieldsRegistrationTestBar* FieldsRegistrationTestBar_;
     FieldsRegistrationTestBaz* FieldsRegistrationTestBaz_;
 
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
 RTTR_REGISTRATION
-{
-    registration::class_<root_class>("root_class")
-        .constructor<>();
-    
+{    
     registration::class_<FieldsRegistrationTestBat>("FieldsRegistrationTestBat")
         .constructor<>()
         .property("int_", &FieldsRegistrationTestBat::int_)
@@ -130,8 +127,9 @@ protected:
         di.register_field<FieldsRegistrationTestBaz>("map_", di_map);
     }
 
+    // void TearDown() override;
     void TearDown() override {
-        delete di_int_ptr;
+        delete[] di_int_ptr;
     }
 
     di_container di; 

@@ -3,10 +3,11 @@
 
 #include <rttr/type>
 
-class root_class {
-public:
-    virtual ~root_class() {};
-    RTTR_ENABLE()
-};
+// DEPRICATED
+// class root_class {
+// public:
+//     virtual ~root_class() {};
+//     RTTR_ENABLE()
+// };
 
 #endif //_ROOT_CLASS_H_INCLUDED

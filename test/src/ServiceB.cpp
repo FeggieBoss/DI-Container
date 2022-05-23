@@ -3,7 +3,7 @@
 
 std::mt19937_64 rng2(std::chrono::steady_clock::now().time_since_epoch().count());
 
-ServiceB::ServiceB() : root_class() {
+ServiceB::ServiceB() {
     id = rng2()%10;
     //std::cout<<"constructor of ServiceB "<<id<<'\n';
 }
