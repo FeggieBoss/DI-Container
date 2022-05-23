@@ -8,7 +8,7 @@
 #include "root_class.h"
 
 class ServiceB;
-class ServiceA : public root_class { 
+class ServiceA { 
 public:
     int id;
     ServiceA();
@@ -17,7 +17,7 @@ public:
 
     std::string say();
 
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
 #endif //_SERVICE_A_CLASS_H_INCLUDED

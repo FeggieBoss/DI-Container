@@ -127,7 +127,9 @@ public:
     }
 
     void field_file_registration(const std::string& file_name) {
-        json j = json::parse(fopen(file_name.c_str(), "r"));
+        FILE* fp = fopen(file_name.c_str(), "r");
+
+        json j = json::parse(fp);
         register_field<int>(j["int"]);
         register_field<signed int>(j["signed int"]);
         register_field<unsigned int>(j["unsigned int"]);
@@ -135,7 +137,13 @@ public:
         register_field<double>(j["double"]);
         register_field<std::string>(j["std::string"]);
         register_field<std::vector<bool>>(j["std::vector<bool>"]);
+        register_field<std::vector<int>>(j["std::vector<int>"]);
+        register_field<std::vector<std::string>>(j["std::vector<std::string>"]);
         register_field<std::map<bool, bool>>(j["std::map<bool, bool>"]);
+        register_field<std::map<int, int>>(j["std::map<int, int>"]);
+        register_field<std::map<std::string, int>>(j["std::map<std::string, int>"]);
+
+        fclose(fp);
     }
 
     template <class C> 
@@ -167,6 +175,9 @@ private:
     bool create_instance(const std::vector<rttr::variant> params) {
         rttr::type typeI = rttr::type::get<I>(), typeC = rttr::type::get<C>();
         std::string typeI_name(typeI.get_name());
+
+        if(singleton_instances.find(typeI_name) != singleton_instances.end())
+            singleton_instances.erase(singleton_instances.find(typeI_name));
         
         std::vector<rttr::type> params_types;
         for(auto &el : params) 

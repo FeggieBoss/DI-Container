@@ -10,32 +10,29 @@ using namespace rttr;
       
 */
 
-class ScopedTestBar : public root_class {
+class ScopedTestBar {
 public:
     int id;
     ScopedTestBar() : id(di_container_::rng()) {};
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class ScopedTestBaz : public root_class {
+class ScopedTestBaz {
 public:
     ScopedTestBar* bar;
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class ScopedTestFita : public root_class {
+class ScopedTestFita {
 public:
     ScopedTestBar* bar;
     ScopedTestBaz* baz;
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
 
 RTTR_REGISTRATION
 {
-    registration::class_<root_class>("root_class")
-        .constructor<>();
-    
     registration::class_<ScopedTestFita>("ScopedTestFita")
         .constructor<>()
         .property("bar", &ScopedTestFita::bar)

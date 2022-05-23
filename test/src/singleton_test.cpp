@@ -8,31 +8,28 @@ using namespace rttr;
     Bar(scoped)--->Fita(singleton)<---Baz(transient)
 */
 
-class SingletonTestFita : public root_class {
+class SingletonTestFita {
 public:
     int id;
     SingletonTestFita() : id(di_container_::rng()) {};
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class SingletonTestBar : public root_class {
+class SingletonTestBar {
 public:
     SingletonTestFita* bar_fita;
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class SingletonTestBaz : public root_class {
+class SingletonTestBaz {
 public:
     SingletonTestFita* baz_fita;
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
 
 RTTR_REGISTRATION
 {
-    registration::class_<root_class>("root_class")
-        .constructor<>();
-    
     registration::class_<SingletonTestFita>("SingletonTestFita")
         .constructor<>()
         .property("id", &SingletonTestFita::id);

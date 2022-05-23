@@ -9,32 +9,29 @@ using namespace rttr;
                    |-->Baz(singleton)-->Bar(transient)
 */
 
-class TransientTestBar : public root_class {
+class TransientTestBar {
 public:
     int id;
     TransientTestBar() : id(di_container_::rng()) {};
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class TransientTestBaz : public root_class {
+class TransientTestBaz {
 public:
     TransientTestBar* bar;
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
-class TransientTestFita : public root_class {
+class TransientTestFita {
 public:
     TransientTestBar* bar;
     TransientTestBaz* baz;
-    RTTR_ENABLE(root_class)
+    RTTR_ENABLE()
 };
 
 
 RTTR_REGISTRATION
 {
-    registration::class_<root_class>("root_class")
-        .constructor<>();
-    
     registration::class_<TransientTestFita>("TransientTestFita")
         .constructor<>()
         .property("bar", &TransientTestFita::bar)
