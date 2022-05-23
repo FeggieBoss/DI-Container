@@ -143,7 +143,6 @@ public:
         register_field<std::map<int, int>>(j["std::map<int, int>"]);
         register_field<std::map<std::string, int>>(j["std::map<std::string, int>"]);
 
-        // close!!!
         fclose(fp);
     }
 
