@@ -92,7 +92,7 @@ public:
     }
 
     template <class I, class C>
-    bool register_instance(const std::vector<rttr::variant> params, const lifetime_type& t) {
+    bool register_instance(const std::vector<rttr::variant> params, const lifetime_type& t = lifetime_type::Transient) {
         bool no_error = create_instance<I,C>(params);
         if(!no_error) {
             return false;
@@ -146,13 +146,13 @@ public:
         fclose(fp);
     }
 
-    template <class C> 
-    std::shared_ptr<C> get_instance() {
-        rttr::type t = rttr::type::get<C>();
+    template <class I> 
+    std::shared_ptr<I> get_instance() {
+        rttr::type t = rttr::type::get<I>();
         rttr::variant _instance = get_instance_by_type(t);
-        
-        std::shared_ptr<C> instance = _instance.get_value<std::shared_ptr<C>>();
 
+        std::shared_ptr<I> instance = _instance.get_value<std::shared_ptr<I>>();
+        
         scoped_instances.clear();
         return instance;
     };
@@ -191,6 +191,7 @@ private:
         rttr::variant instance = ctor.invoke_variadic(args);
         if(instance.is_valid()) {
             reg_instances[typeI_name] = instance;
+            typename_of_instance[typeI_name] = std::string(typeC.get_name());
             reg_ctor_params[typeI_name] = std::make_pair(std::string(typeC.get_name()), params);
             return true;
         }
@@ -242,8 +243,6 @@ private:
             args.emplace_back(rttr::argument(el));
 
         return rttr::type::get_by_name(ctor_params.first).get_constructor(params_types).invoke_variadic(args);
-
-        return nullptr;
     }
 
     rttr::variant get_instance_by_type(rttr::type t) {
@@ -260,7 +259,7 @@ private:
 
         if(registered_fields.find(type_name) != registered_fields.end()) {
             for(auto reg_field : registered_fields[type_name])
-                t.set_property_value(reg_field.first, ret_instance, reg_field.second);
+                rttr::type::get_by_name(typename_of_instance[type_name]).set_property_value(reg_field.first, ret_instance, reg_field.second);
         }
 
         shared_ptrs.emplace_back(ret_instance);
@@ -272,7 +271,12 @@ private:
             case Transient : /*do nothing*/;
         }
 
-        for(auto &prop : t.get_properties()) {
+        rttr::type::get_by_name(typename_of_instance[type_name]);
+        for(auto &prop : rttr::type::get_by_name(typename_of_instance[type_name]).get_properties(
+            rttr::filter_item::instance_item 
+            | rttr::filter_item::public_access 
+            | rttr::filter_item::non_public_access
+        )) {
             std::string prop_type_name(prop.get_type().get_name());
 
             if(prop_type_name.back()=='*') {
@@ -296,6 +300,7 @@ private:
 
 private:
     std::map<std::string, rttr::variant> reg_instances, singleton_instances, scoped_instances;
+    std::map<std::string, std::string> typename_of_instance;
     std::map<std::string, lifetime_type> lifetime_types;
     std::map<std::string, std::pair<std::string, std::vector<rttr::variant>>> reg_ctor_params;
     std::map<std::string, std::vector<std::pair<std::string, rttr::variant>>> registered_fields;
