@@ -1,43 +1,43 @@
 {
-    "Fita": { 
-        "Fita": {
+    "InstanceRegistrationJsonFita": { 
+        "InstanceRegistrationJsonFita": {
             "lifetime_type": "Singleton",
-            "std::string": "Slovo mobilnaya razrabotka i slovo smert dlya vas oznachayut odno i to zhe",
-            "Bat": {
+            "std::string": "Slovo mobil'naya razrabotka i slovo smert' dlya vas oznachayut odno i to zhe",
+            "InstanceRegistrationJsonBat": {
                 "std::string": "da tebe kulak"
             },
-            "Bar": {
+            "InstanceRegistrationJsonBar": {
                 "int": 12345,
                 "signed int": -12345,
                 "unsigned int": 12345,
                 "bool": true,
                 "double": 12345.12345,
-                "Baz": {
+                "InstanceRegistrationJsonBaz": {
                     "std::string": "12345",
-                    "std::vector<bool>": [[true, false, true, false, true]],
-                    "std::map<bool, bool>": [[[false, true], [true, true]]]
+                    "std::vector<bool>": [true, false, true, false, true],
+                    "std::map<bool, bool>": [[false, true], [true, true]]
                 }
             }
         }
     },
-    "Bar": { 
-        "Bar": {
+    "InstanceRegistrationJsonBar": { 
+        "InstanceRegistrationJsonBar": {
             "int": 54321,
             "signed int": -54321,
             "unsigned int": 54321,
             "lifetime_type": "Scoped",
             "bool": true,
             "double": 54321.54321,
-            "Baz": {
+            "InstanceRegistrationJsonBaz": {
                 "std::string": "54321",
-                "std::vector<bool>": [[false, true, false, true]],
-                "std::map<bool, bool>": [[[false, true], [true, false]]]
+                "std::vector<bool>": [false, true, false, true],
+                "std::map<bool, bool>": [[false, true], [true, false]]
             }
         }
     },
-    "Baz": { 
-        "Baz": {
-            "std::string": "Second constructor",
+    "InstanceRegistrationJsonBaz": { 
+        "InstanceRegistrationJsonBaz": {
+            "std::string": "Second constructor!",
             "lifetime_type": "Transient"
         }
     }

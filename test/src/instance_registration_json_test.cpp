@@ -56,24 +56,20 @@ public:
     unsigned int unsigned_int_;
     bool bool_;
     double double_;
-    char char_;
 
-    InstanceRegistrationJsonBaz baz;
+    std::shared_ptr<InstanceRegistrationJsonBaz> baz;
 
     InstanceRegistrationJsonBar( int int__, 
                                signed int signed_int__,
                                unsigned int unsigned_int__,
                                bool bool__,
                                double double__,
-                               char char__,
-                               InstanceRegistrationJsonBaz baz_) {
+                               std::shared_ptr<InstanceRegistrationJsonBaz> baz_) {
         int_ = int__;
         signed_int_ = signed_int__;
         unsigned_int_ = unsigned_int__;
         bool_ = bool__;
         double_ = double__;
-        char_ = char__;
-
         baz = baz_;
     };
 
@@ -91,13 +87,14 @@ class InstanceRegistrationJsonFita {
 public:
     std::string string_;
 
-    InstanceRegistrationJsonBat bat;
+    std::shared_ptr<InstanceRegistrationJsonBat> bat;
 
-    InstanceRegistrationJsonBar bar;
+    std::shared_ptr<InstanceRegistrationJsonBar> bar;
 
-    InstanceRegistrationJsonFita(std::string string__, InstanceRegistrationJsonBat bat_, InstanceRegistrationJsonBar bar_) : string_(string__),
-                                                   bat(bat_),
-                                                   bar(bar_) {};
+    InstanceRegistrationJsonFita(std::string string__, std::shared_ptr<InstanceRegistrationJsonBat> bat_, std::shared_ptr<InstanceRegistrationJsonBar> bar_) 
+        : string_(string__),
+          bat(bat_),
+          bar(bar_) {};
     RTTR_ENABLE()
 };
 
@@ -112,13 +109,12 @@ RTTR_REGISTRATION
         .property("map_", &InstanceRegistrationJsonBaz::map_, registration::private_access);
 
     registration::class_<InstanceRegistrationJsonBar>("InstanceRegistrationJsonBar")
-        .constructor<int, signed int, unsigned int, bool, double, char, InstanceRegistrationJsonBaz>()
+        .constructor<int, signed int, unsigned int, bool, double, std::shared_ptr<InstanceRegistrationJsonBaz>>()
         .property("int_", &InstanceRegistrationJsonBar::int_)
         .property("signed_int_", &InstanceRegistrationJsonBar::signed_int_)
         .property("unsigned_int_", &InstanceRegistrationJsonBar::unsigned_int_)
         .property("bool_", &InstanceRegistrationJsonBar::bool_)
         .property("double_", &InstanceRegistrationJsonBar::double_)
-        .property("char_", &InstanceRegistrationJsonBar::char_)
         .property("baz", &InstanceRegistrationJsonBar::baz);
 
     registration::class_<InstanceRegistrationJsonBat>("InstanceRegistrationJsonBat")
@@ -126,7 +122,7 @@ RTTR_REGISTRATION
         .property("string_", &InstanceRegistrationJsonBat::string_);
 
     registration::class_<InstanceRegistrationJsonFita>("InstanceRegistrationJsonFita")
-        .constructor<std::string, InstanceRegistrationJsonBat, InstanceRegistrationJsonBar>()
+        .constructor<std::string, std::shared_ptr<InstanceRegistrationJsonBat>, std::shared_ptr<InstanceRegistrationJsonBar>>()
         .property("string_", &InstanceRegistrationJsonFita::string_)
         .property("bat", &InstanceRegistrationJsonFita::bat)
         .property("bar", &InstanceRegistrationJsonFita::bar);
@@ -155,24 +151,26 @@ TEST_F(InstanceRegistrationJsonTest, Bar) {
     EXPECT_EQ(bar->int_,54321);
     EXPECT_EQ(bar->signed_int_,-54321);
     EXPECT_EQ(bar->unsigned_int_,54321);
+    EXPECT_EQ(bar->bool_,true);
     EXPECT_EQ(bar->double_,54321.54321);
-    EXPECT_EQ(bar->baz.getter_string_(),"54321");
-    EXPECT_EQ(bar->baz.getter_vector_(),std::vector<bool>({0,1,0,1}));
-    EXPECT_EQ(bar->baz.getter_map_()[0], 1);
-    EXPECT_EQ(bar->baz.getter_map_()[1], 0);
+    EXPECT_EQ(bar->baz->getter_string_(),"54321");
+    EXPECT_EQ(bar->baz->getter_vector_(),std::vector<bool>({0,1,0,1}));
+    EXPECT_EQ(bar->baz->getter_map_()[0], 1);
+    EXPECT_EQ(bar->baz->getter_map_()[1], 0);
 }
 
 TEST_F(InstanceRegistrationJsonTest, Fita) {
     auto fita = di.get_instance<InstanceRegistrationJsonFita>();
 
     EXPECT_EQ(fita->string_, "Slovo mobil'naya razrabotka i slovo smert' dlya vas oznachayut odno i to zhe");
-    EXPECT_EQ(fita->bat.string_, "da tebe kulak");
-    EXPECT_EQ(fita->bar.int_,12345);
-    EXPECT_EQ(fita->bar.signed_int_,-12345);
-    EXPECT_EQ(fita->bar.unsigned_int_,12345);
-    EXPECT_EQ(fita->bar.double_,12345.12345);
-    EXPECT_EQ(fita->bar.baz.getter_string_(),"12345");
-    EXPECT_EQ(fita->bar.baz.getter_vector_(),std::vector<bool>({1,0,1,0,1}));
-    EXPECT_EQ(fita->bar.baz.getter_map_()[0], 1);
-    EXPECT_EQ(fita->bar.baz.getter_map_()[1], 1);
+    EXPECT_EQ(fita->bat->string_, "da tebe kulak");
+    EXPECT_EQ(fita->bar->int_,12345);
+    EXPECT_EQ(fita->bar->signed_int_,-12345);
+    EXPECT_EQ(fita->bar->unsigned_int_,12345);
+    EXPECT_EQ(fita->bar->bool_,true);
+    EXPECT_EQ(fita->bar->double_,12345.12345);
+    EXPECT_EQ(fita->bar->baz->getter_string_(),"12345");
+    EXPECT_EQ(fita->bar->baz->getter_vector_(),std::vector<bool>({1,0,1,0,1}));
+    EXPECT_EQ(fita->bar->baz->getter_map_()[0], 1);
+    EXPECT_EQ(fita->bar->baz->getter_map_()[1], 1);
 }

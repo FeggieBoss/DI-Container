@@ -6,7 +6,7 @@
 #include <rttr/type>
 
 #include <nlohmann/json.hpp>
-using json = nlohmann::json;
+using json = nlohmann::ordered_json;
 
 #include <iostream>
 #include <iomanip>
@@ -182,7 +182,10 @@ public:
                 std::string class_name = cur_class.key();
 
                 std::vector<rttr::variant> params;
+                int cur = -1;
                 for(auto &field : cur_class.value().items()) {
+                    ++cur;
+
                     std::string field_name = field.key();
                     json val = field.value();
                     
@@ -191,7 +194,10 @@ public:
                         continue;
                     }
 
-                    params.push_back(parse_json_instance(field_name, val));
+                    if(supported_basic_types.find(field_name)!=supported_basic_types.end())
+                        params.push_back(parse_json_basic_type(field_name, val));
+                    else
+                        params.push_back(parse_json_instance(field_name, val));
                 }
 
                 if(lifetime_t.empty() || lifetime_t == "Transient")
@@ -219,18 +225,6 @@ public:
         return instance;
     };
 
-    // template <class I, class C> 
-    // std::shared_ptr<I> get_instance() {
-    //     rttr::type t = rttr::type::get<I>();
-    //     rttr::variant _instance = get_instance_by_type(t);
-        
-    //     std::shared_ptr<C> instance = _instance.get_value<std::shared_ptr<C>>();
-
-    //     scoped_instances.clear();
-    //     return instance;
-    // };
-
-    //std::cout<<"otladka\n";
     ~di_container() {};
 private:
     bool create_instance(const std::string& interface_name, const std::string& class_name, const std::vector<rttr::variant> params) {
@@ -241,7 +235,7 @@ private:
             singleton_instances.erase(singleton_instances.find(typeI_name));
         
         std::vector<rttr::type> params_types;
-        for(auto &el : params) 
+        for(auto &el : params)
             params_types.emplace_back(el.get_type());
 
         std::vector<rttr::argument> args;
@@ -293,48 +287,37 @@ private:
         lifetime_types[type_name] = lifetime_type::Transient;
     };
 
-    template <typename K>
-    rttr::variant parse_json_basic_type(json &j) {
-        for(auto &val : j.items()) {
-            return val.value().get<K>();
-        }
+    rttr::variant parse_json_basic_type(const std::string& t, const json &j) {
+        if(t=="int")                        return j.get<int>();
+        if(t=="signed int")                 return j.get<signed int>();
+        if(t=="unsigned int")               return j.get<unsigned int>();
+        if(t=="bool")                       return j.get<bool>();
+        if(t=="double")                     return j.get<double>();
+        if(t=="std::string")                return j.get<std::string>();
+        if(t=="std::vector<bool>")          return j.get<std::vector<bool>>();
+        if(t=="std::vector<int>")           return j.get<std::vector<int>>();
+        if(t=="std::vector<std::string>")   return j.get<std::vector<std::string>>();
+        if(t=="std::map<bool, bool>")       return j.get<std::map<bool, bool>>();
+        if(t=="std::map<int, int>")         return j.get<std::map<int, int>>();
+        if(t=="std::map<std::string, int>") return j.get<std::map<std::string, int>>();
         return nullptr;
     }
 
-    rttr::variant parse_json_basic_type(json &j) {
-        std::vector<rttr::variant> ret;
-
-        ret.push_back(parse_json_basic_type<int>(j["int"]));
-        ret.push_back(parse_json_basic_type<signed int>(j["signed int"]));
-        ret.push_back(parse_json_basic_type<unsigned int>(j["unsigned int"]));
-        ret.push_back(parse_json_basic_type<bool>(j["bool"]));
-        ret.push_back(parse_json_basic_type<double>(j["double"]));
-        ret.push_back(parse_json_basic_type<std::string>(j["std::string"]));
-        ret.push_back(parse_json_basic_type<std::vector<bool>>(j["std::vector<bool>"]));
-        ret.push_back(parse_json_basic_type<std::vector<int>>(j["std::vector<int>"]));
-        ret.push_back(parse_json_basic_type<std::vector<std::string>>(j["std::vector<std::string>"]));
-        ret.push_back(parse_json_basic_type<std::map<bool, bool>>(j["std::map<bool, bool>"]));
-        ret.push_back(parse_json_basic_type<std::map<int, int>>(j["std::map<int, int>"]));
-        ret.push_back(parse_json_basic_type<std::map<std::string, int>>(j["std::map<std::string, int>"]));
-
-        for(auto &el : ret)
-            if(el!=nullptr)
-                return el;
-        return nullptr;
-    }
-
-    rttr::variant parse_json_instance(const std::string& class_name, json &j) {
+    rttr::variant parse_json_instance(const std::string& class_name, const json &j) {
         std::vector<rttr::variant> params;
         for(auto &field : j.items()) {
             std::string field_name = field.key();
 
             if(supported_basic_types.find(field_name)!=supported_basic_types.end()) {
-                params.push_back(parse_json_basic_type(field.value()));
+                params.push_back(parse_json_basic_type(field_name, field.value()));
             }
             else {
                 params.push_back(parse_json_instance(field_name, field.value()));
             }
         }
+
+        if(supported_basic_types.find(class_name)!=supported_basic_types.end())
+            return params.back();
 
         std::vector<rttr::type> params_types;
         for(auto &el : params) 
@@ -443,6 +426,7 @@ private:
     std::set<std::string> supported_basic_types {
         {"int"},
         {"signed int"},
+        {"unsigned int"},
         {"bool"},
         {"double"},
         {"std::string"},
