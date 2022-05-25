@@ -1,0 +1,44 @@
+{
+    "Fita": { 
+        "Fita": {
+            "lifetime_type": "Singleton",
+            "std::string": "Slovo mobilnaya razrabotka i slovo smert dlya vas oznachayut odno i to zhe",
+            "Bat": {
+                "std::string": "da tebe kulak"
+            },
+            "Bar": {
+                "int": 12345,
+                "signed int": -12345,
+                "unsigned int": 12345,
+                "bool": true,
+                "double": 12345.12345,
+                "Baz": {
+                    "std::string": "12345",
+                    "std::vector<bool>": [[true, false, true, false, true]],
+                    "std::map<bool, bool>": [[[false, true], [true, true]]]
+                }
+            }
+        }
+    },
+    "Bar": { 
+        "Bar": {
+            "int": 54321,
+            "signed int": -54321,
+            "unsigned int": 54321,
+            "lifetime_type": "Scoped",
+            "bool": true,
+            "double": 54321.54321,
+            "Baz": {
+                "std::string": "54321",
+                "std::vector<bool>": [[false, true, false, true]],
+                "std::map<bool, bool>": [[[false, true], [true, false]]]
+            }
+        }
+    },
+    "Baz": { 
+        "Baz": {
+            "std::string": "Second constructor",
+            "lifetime_type": "Transient"
+        }
+    }
+}
